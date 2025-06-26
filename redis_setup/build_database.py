@@ -1,19 +1,68 @@
 from redis_om import (Field, JsonModel)
 import json
+import redis
 from typing import List
-from redis_setup.entities import *
+from domain.entities import *
 
 def build_db() -> bool:
     data : dict = json.load(open("./redis_setup/db.json"))
     
     try:
-        User.delete_many(User.all_pks())
-        Company.delete_many(Company.all_pks())
-        Post.delete_many(Post.all_pks())
-        Comment.delete_many(Company.all_pks())
+        # Limpiar base de datos usando una conexión Redis directa
+        print("Clearing database...")
+        
+        r = redis.Redis(decode_responses=True)
+        
+        # Eliminar todas las claves que empiecen con nuestros prefijos
+        prefixes = ['user:*', 'company:*', 'post:*', 'comment:*']
+        deleted_count = 0
+        
+        for prefix in prefixes:
+            keys = r.keys(prefix)
+            if keys:
+                deleted_keys = r.delete(*keys)
+                deleted_count += deleted_keys
+                print(f"Deleted {deleted_keys} keys with prefix {prefix}")
+        
+        # También eliminar índices antiguos y claves con módulo completo
+        problematic_patterns = [
+            '*:index', 
+            '*domain.entities*', 
+            '*redis_setup*',
+            'user:domain.entities.User:*',
+            'company:domain.entities.Company:*',
+            'post:domain.entities.Post:*',
+            'comment:domain.entities.Comment:*'
+        ]
+        
+        for pattern in problematic_patterns:
+            keys = r.keys(pattern)
+            if keys:
+                deleted_keys = r.delete(*keys)
+                deleted_count += deleted_keys
+                print(f"Deleted {deleted_keys} problematic keys with pattern {pattern}")
+        
+        print(f"Total deleted: {deleted_count} keys")
         print("Database Cleared Successfully")
+        
+        # Forzar recreación de índices
+        print("Recreating indexes...")
+        from redis_om import Migrator
+        try:
+            # Eliminar índices antiguos manualmente si existen
+            old_indexes = r.keys("*:index")
+            if old_indexes:
+                r.delete(*old_indexes)
+                print(f"Deleted {len(old_indexes)} old indexes")
+            
+            # Ejecutar migrator para crear índices correctos
+            Migrator().run()
+            print("Indexes recreated successfully")
+        except Exception as idx_error:
+            print(f"Warning: Index creation error: {idx_error}")
+        
     except Exception as e:
-        print(f"Error Cleaning Dataase: {e}")
+        print(f"Error Cleaning Database: {e}")
         return False
     
     print(type(data))
@@ -23,21 +72,37 @@ def build_db() -> bool:
     
     try:
         for key in keys:
+            print(f"Processing: {key}")
             if key.startswith("user:"):
-                user = User.from_json(data[key])
+                # Crear el usuario con PK específico
+                user_data = data[key]
+                user = User(**user_data)
+                user.pk = user_data['id']  # Asignar PK específico
                 user.save()
+                print(f"Saved user: {user_data['name']} with ID: {user_data['id']}")
             elif key.startswith("company:"):
-                company = Company.from_json(data[key])
+                company_data = data[key]
+                company = Company(**company_data)
+                company.pk = company_data['id']
                 company.save()
+                print(f"Saved company: {company_data['name']} with ID: {company_data['id']}")
             elif key.startswith("post:"):
-                post = Post.from_json(data[key])
+                post_data = data[key]
+                post = Post(**post_data)
+                post.pk = post_data['id']
                 post.save()
+                print(f"Saved post: {post_data['title']} with ID: {post_data['id']}")
             elif key.startswith("comment:"):
-                comment = Comment.from_json(data[key])
+                comment_data = data[key]
+                comment = Comment(**comment_data)
+                comment.pk = comment_data['id']
                 comment.save()
+                print(f"Saved comment: {comment_data['id']}")
 
     except Exception as e:
-        print(f"Error Building Dataase: {e}")
+        print(f"Error Building Database: {e}")
+        print(f"Failed on key: {key}")
+        print(f"Data for key: {data[key]}")
         return False
   
     print("Database Built Successfully")
