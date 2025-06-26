@@ -1,0 +1,104 @@
+{
+    "company:550e8400-e29b-41d4-a716-446655440000": {
+        "id": "550e8400-e29b-41d4-a716-446655440000",
+        "name": "TechCorp Solutions",
+        "admin_id": "550e8400-e29b-41d4-a716-446655440001",
+        "employees": ["550e8400-e29b-41d4-a716-446655440001", "550e8400-e29b-41d4-a716-446655440002", "550e8400-e29b-41d4-a716-446655440003"]
+    },
+    "user:550e8400-e29b-41d4-a716-446655440001": {
+        "id": "550e8400-e29b-41d4-a716-446655440001",
+        "name": "Carlos Rodriguez",
+        "email": "carlos.rodriguez@techcorp.com",
+        "role": "admin",
+        "company_id": "550e8400-e29b-41d4-a716-446655440000"
+    },
+    "user:550e8400-e29b-41d4-a716-446655440002": {
+        "id": "550e8400-e29b-41d4-a716-446655440002",
+        "name": "Maria Gonzalez",
+        "email": "maria.gonzalez@techcorp.com",
+        "role": "employee",
+        "company_id": "550e8400-e29b-41d4-a716-446655440000"
+    },
+    "user:550e8400-e29b-41d4-a716-446655440003": {
+        "id": "550e8400-e29b-41d4-a716-446655440003",
+        "name": "Luis Martinez",
+        "email": "luis.martinez@techcorp.com",
+        "role": "moderator",
+        "company_id": "550e8400-e29b-41d4-a716-446655440000"
+    },
+    "post:550e8400-e29b-41d4-a716-446655440004": {
+        "id": "550e8400-e29b-41d4-a716-446655440004",
+        "title": "Nuevas estrategias de ventas para Q3",
+        "description": "Propongo implementar un nuevo enfoque en nuestras estrategias de ventas para el tercer trimestre. He estado analizando las métricas del Q2 y creo que podemos mejorar significativamente nuestros resultados enfocándonos en clientes corporativos.",
+        "author_id": "550e8400-e29b-41d4-a716-446655440001",
+        "company_id": "550e8400-e29b-41d4-a716-446655440000",
+        "tags": ["ventas", "estrategia", "Q3", "corporativo"],
+        "views": 45,
+        "likes": 12,
+        "comments_count": 3,
+        "created_at": "2025-06-26T09:15:00Z"
+    },
+    "post:550e8400-e29b-41d4-a716-446655440005": {
+        "id": "550e8400-e29b-41d4-a716-446655440005",
+        "title": "Actualización del proyecto de desarrollo web",
+        "description": "El equipo de desarrollo ha completado el 75% del nuevo sistema de gestión de clientes. Necesitamos coordinar las pruebas con el equipo de QA para la próxima semana. El lanzamiento está programado para finales de julio.",
+        "author_id": "550e8400-e29b-41d4-a716-446655440002",
+        "company_id": "550e8400-e29b-41d4-a716-446655440000",
+        "tags": ["proyectos", "desarrollo", "web", "sistema", "clientes"],
+        "views": 23,
+        "likes": 8,
+        "comments_count": 2,
+        "created_at": "2025-06-26T14:30:00Z"
+    },
+    "comment:550e8400-e29b-41d4-a716-446655440006": {
+        "id": "550e8400-e29b-41d4-a716-446655440006",
+        "post_id": "550e8400-e29b-41d4-a716-446655440004",
+        "author_id": "550e8400-e29b-41d4-a716-446655440002",
+        "company_id": "550e8400-e29b-41d4-a716-446655440000",
+        "content": "Excelente propuesta Carlos! Me parece muy acertado enfocarse en el segmento corporativo. ¿Has considerado implementar un programa de demos personalizadas?",
+        "parent_comment_id": null,
+        "likes": 5,
+        "created_at": "2025-06-26T10:30:00Z",
+        "updated_at": null
+    },
+    "comment:550e8400-e29b-41d4-a716-446655440007": {
+        "id": "550e8400-e29b-41d4-a716-446655440007",
+        "post_id": "550e8400-e29b-41d4-a716-446655440004",
+        "author_id": "550e8400-e29b-41d4-a716-446655440001",
+        "content": "¡Genial idea Maria! Sí, de hecho ya tengo en mente crear demos interactivas específicas para cada industria. Creo que eso nos dará una ventaja competitiva importante.",
+        "parent_comment_id": "550e8400-e29b-41d4-a716-446655440006",
+        "likes": 2,
+        "created_at": "2025-06-26T11:15:00Z",
+        "updated_at": null
+    },
+    "comment:550e8400-e29b-41d4-a716-446655440008": {
+        "id": "550e8400-e29b-41d4-a716-446655440008",
+        "post_id": "550e8400-e29b-41d4-a716-446655440004",
+        "author_id": "550e8400-e29b-41d4-a716-446655440003",
+        "content": "Como moderador, me encanta ver esta colaboración. ¿Necesitan apoyo del equipo de marketing para desarrollar el material de las demos?",
+        "parent_comment_id": null,
+        "likes": 3,
+        "created_at": "2025-06-26T12:00:00Z",
+        "updated_at": null
+    },
+    "comment:550e8400-e29b-41d4-a716-446655440009": {
+        "id": "550e8400-e29b-41d4-a716-446655440009",
+        "post_id": "550e8400-e29b-41d4-a716-446655440005",
+        "author_id": "550e8400-e29b-41d4-a716-446655440001",
+        "content": "Excelente progreso Maria! El 75% de completado es impresionante. ¿Hay algún riesgo que debamos considerar para cumplir con la fecha de lanzamiento?",
+        "parent_comment_id": null,
+        "likes": 1,
+        "created_at": "2025-06-26T15:00:00Z",
+        "updated_at": null
+    },
+    "comment:550e8400-e29b-41d4-a716-446655440010": {
+        "id": "550e8400-e29b-41d4-a716-446655440010",
+        "post_id": "550e8400-e29b-41d4-a716-446655440005",
+        "author_id": "550e8400-e29b-41d4-a716-446655440002",
+        "content": "Gracias Carlos! Por el momento vamos bien con los tiempos. El único punto crítico será la integración con el sistema legacy, pero ya tenemos un plan B si surge algún inconveniente.",
+        "parent_comment_id": "550e8400-e29b-41d4-a716-446655440009",
+        "likes": 4,
+        "created_at": "2025-06-26T15:30:00Z",
+        "updated_at": null
+    }
+}
