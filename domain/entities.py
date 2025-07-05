@@ -27,37 +27,37 @@ class UserRole(str, Enum):
 
 
 class User(JsonModel):
-    id: str = Field(index=True)
-    name: str = Field(index=True)
-    email: str = Field(index=True)
-    role: UserRole = Field(index=True)
-    company_id: str = Field(index=True)
+    id: str = Field()
+    name: str = Field()
+    email: str = Field()
+    role: UserRole = Field()
+    company_id: str = Field()
 
     class Meta:
         model_key_prefix = "user"
 
 
 class Company(JsonModel):
-    id: str = Field(index=True)
-    name: str = Field(index=True)
-    admin_id: str = Field(index=True)
-    employees: list[str] = Field(index=True)
+    id: str = Field()
+    name: str = Field()
+    admin_id: str = Field()
+    employees: list[str] = Field()
 
     class Meta:
         model_key_prefix = "company"
 
 
 class Post(JsonModel):
-    id: str = Field(index=True)
-    title: str = Field(index=True)
-    description: str = Field(index=True)
-    author_id: str = Field(index=True)
-    company_id: str = Field(index=True)
-    tags: list[str] = Field(index=True)
-    views: int = Field(index=True)
-    likes: int = Field(index=True)
-    comments_count: int = Field(index=True)
-    created_at: str = Field(index=True)
+    id: str = Field()
+    title: str = Field()
+    description: str = Field()
+    author_id: str = Field()
+    company_id: str = Field()
+    tags: list[str] = Field()
+    views: int = Field()
+    likes: int = Field()
+    comments_count: int = Field()
+    created_at: str = Field()
 
     class Meta:
         model_key_prefix = "post"
@@ -78,15 +78,15 @@ class Post(JsonModel):
         )
 
 class Comment(JsonModel):
-    id: str = Field(index=True)
-    post_id: str = Field(index=True)
-    author_id: str = Field(index=True)
-    company_id: str = Field(index=True)
-    content: str = Field(index=True)
-    parent_comment_id: Optional[str] = Field(index=True)
-    likes: int = Field(index=True)
-    created_at: str = Field(index=True)
-    updated_at: Optional[str] = Field(index=True)
+    id: str = Field()
+    post_id: str = Field()
+    author_id: str = Field()
+    company_id: str = Field()
+    content: str = Field()
+    parent_comment_id: Optional[str] = Field()
+    likes: int = Field()
+    created_at: str = Field()
+    updated_at: Optional[str] = Field()
 
     class Meta:
         model_key_prefix = "comment"
