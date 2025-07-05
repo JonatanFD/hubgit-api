@@ -15,6 +15,7 @@ from redis_setup.build_database import build_db
 from redis_om import Migrator
 
 from resources.create_post_resource import CreatePostResource
+from resources.update_user_name_resource import UpdateUserNameRequest
 from services.repositories.posts_service import PostsService
 from services.repositories.users_service import UsersService
 
@@ -156,5 +157,22 @@ def debug_redis():
                 "REDIS_PORT": os.getenv('REDIS_PORT', 'NOT_SET'),
                 "REDIS_DB": os.getenv('REDIS_DB', 'NOT_SET')
             }
+        }
+
+
+@app.put("/users/{user_id}")
+def update_user_name(user_id: str, update_request: UpdateUserNameRequest):
+    """Endpoint para actualizar el nombre de un usuario por su ID"""
+    try:
+        updated_user = UsersService.updateUserName(user_id, update_request.name)
+        return {
+            "message": "User name updated successfully",
+            "user": updated_user
+        }
+    except Exception as e:
+        return {
+            "error": "Failed to update user name",
+            "details": str(e),
+            "user_id": user_id
         }
 

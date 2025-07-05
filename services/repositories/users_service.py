@@ -1,4 +1,3 @@
-
 import os
 from domain.entities import User
 
@@ -40,3 +39,28 @@ class UsersService:
             print(f"❌ Error getting users: {e}")
             print(f"❌ REDIS_OM_URL environment variable: {os.getenv('REDIS_OM_URL', 'NOT_SET')}")
             return []
+
+    @staticmethod
+    def updateUserName(user_id: str, new_name: str):
+        """
+        Update a user's name by their ID.
+        """
+        try:
+            # Buscar el usuario por ID
+            user = User.get(user_id)
+            
+            # Actualizar el nombre
+            user.name = new_name
+            
+            # Guardar los cambios
+            user.save()
+            
+            # Devolver el usuario actualizado sin el pk
+            user_dict = user.dict()
+            if hasattr(user, 'pk'):
+                user_dict['pk'] = user.pk
+            
+            return user_dict
+        except Exception as e:
+            print(f"❌ Error updating user name: {e}")
+            raise e
