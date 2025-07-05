@@ -1,22 +1,23 @@
 version: '3.8'
 
 services:
-  redis:
-    image: redis:8
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    command: redis-server --appendonly yes
+  # Redis externo en IP 10.0.1.4 - comentar si usas el servicio redis local
+  # redis:
+  #   image: redis:8
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #   command: redis-server --appendonly yes
 
   app:
     build: .
     ports:
       - "8000:8000"
-    depends_on:
-      - redis
+    # depends_on:
+    #   - redis  # Comentado porque Redis está en servidor externo
     environment:
-      - REDIS_HOST=redis
+      - REDIS_HOST=10.0.1.4  # IP de tu servidor Redis externo
       - REDIS_PORT=6379
       - REDIS_PASSWORD=
       - REDIS_DB=0
@@ -24,5 +25,5 @@ services:
       - .:/app
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
-volumes:
-  redis_data:
+# volumes:
+#   redis_data:  # Comentado porque Redis está en servidor externo

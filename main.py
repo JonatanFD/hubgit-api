@@ -6,6 +6,7 @@ from redis_om import Migrator
 
 from resources.create_post_resource import CreatePostResource
 from services.repositories.posts_service import PostsService
+from services.repositories.users_service import UsersService
 
 app = FastAPI()
 
@@ -20,7 +21,9 @@ except Exception as e:
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World from FastAPI in Virtual Machine"}
+    return {"Hello": "World from FastAPI in Virtual Machine",
+            "users": UsersService.getUsers(),
+            }
 
 
 @app.get("/build")

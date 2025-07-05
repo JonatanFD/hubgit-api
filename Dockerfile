@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Variables de entorno para Redis (pueden ser sobrescritas)
-ENV REDIS_HOST=localhost
+ENV REDIS_HOST=10.0.1.4
 ENV REDIS_PORT=6379
 ENV REDIS_PASSWORD=
 ENV REDIS_DB=0
