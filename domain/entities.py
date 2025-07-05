@@ -1,11 +1,21 @@
 import uuid
 from datetime import datetime, timezone
+import os
+from dotenv import load_dotenv
 
 from redis_om import Field, JsonModel
 from typing import Optional, Any, Self
 from enum import Enum
 
 from resources.create_post_resource import CreatePostResource
+
+# Cargar variables de entorno
+load_dotenv()
+
+# Configurar Redis-OM si no está configurado
+if not os.getenv('REDIS_OM_URL'):
+    from redis_setup.redis_config import configure_redis_om
+    configure_redis_om()
 
 
 class UserRole(str, Enum):

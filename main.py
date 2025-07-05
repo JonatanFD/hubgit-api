@@ -1,12 +1,21 @@
 from datetime import datetime, timezone
+import os
+from dotenv import load_dotenv
 
 from fastapi import FastAPI
 from redis_setup.build_database import build_db
+from redis_setup.redis_config import configure_redis_om
 from redis_om import Migrator
 
 from resources.create_post_resource import CreatePostResource
 from services.repositories.posts_service import PostsService
 from services.repositories.users_service import UsersService
+
+# Cargar variables de entorno
+load_dotenv()
+
+# Configurar Redis-OM antes de crear la app
+configure_redis_om()
 
 app = FastAPI()
 
@@ -21,9 +30,21 @@ except Exception as e:
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World from FastAPI in Virtual Machine",
-            "users": UsersService.getUsers(),
-            }
+    try:
+        users = UsersService.getUsers()
+        return {
+            "Hello": "World from FastAPI in Virtual Machine",
+            "users": users,
+            "redis_host": os.getenv('REDIS_HOST', 'localhost'),
+            "redis_port": os.getenv('REDIS_PORT', '6379')
+        }
+    except Exception as e:
+        return {
+            "error": "Failed to connect to Redis or fetch users",
+            "details": str(e),
+            "redis_host": os.getenv('REDIS_HOST', 'localhost'),
+            "redis_port": os.getenv('REDIS_PORT', '6379')
+        }
 
 
 @app.get("/build")
@@ -52,6 +73,47 @@ def create_post(company_id: str, post_resource: CreatePostResource):
 
 @app.get("/test")
 def test():
+    return {"message": "Test endpoint working"}
 
-    print("")
+
+@app.get("/redis-test")
+def redis_test():
+    """Endpoint para probar la conexión con Redis"""
+    try:
+        import redis
+        redis_host = os.getenv('REDIS_HOST', 'localhost')
+        redis_port = int(os.getenv('REDIS_PORT', '6379'))
+        redis_password = os.getenv('REDIS_PASSWORD', None)
+        redis_db = int(os.getenv('REDIS_DB', '0'))
+        
+        # Probar conexión directa
+        r = redis.Redis(
+            host=redis_host,
+            port=redis_port,
+            password=redis_password,
+            db=redis_db,
+            decode_responses=True
+        )
+        
+        # Hacer ping a Redis
+        ping_result = r.ping()
+        
+        # Obtener información del servidor
+        info = r.info()
+        
+        return {
+            "redis_connection": "success",
+            "ping": ping_result,
+            "redis_host": redis_host,
+            "redis_port": redis_port,
+            "redis_version": info.get('redis_version', 'unknown'),
+            "connected_clients": info.get('connected_clients', 0)
+        }
+    except Exception as e:
+        return {
+            "redis_connection": "failed",
+            "error": str(e),
+            "redis_host": os.getenv('REDIS_HOST', 'localhost'),
+            "redis_port": os.getenv('REDIS_PORT', '6379')
+        }
 
