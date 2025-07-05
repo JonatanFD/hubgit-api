@@ -20,16 +20,6 @@ print(f"Redis configurado con URL: {redis_url}")
 
 app = FastAPI()
 
-# Ejecutar migrator para crear índices correctos
-print("Running migrations...")
-try:
-    Migrator().run()
-    print("Migrations completed successfully")
-except Exception as e:
-    print(f"Migration error: {e}")
-    print("Continuing without migrations...")
-
-
 @app.get("/")
 def read_root():
     try:
