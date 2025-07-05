@@ -37,14 +37,14 @@ def read_root():
         return {
             "Hello": "World from FastAPI in Virtual Machine",
             "users": users,
-            "redis_host": os.getenv('REDIS_HOST', 'localhost'),
+            "redis_host": os.getenv('REDIS_HOST', '10.0.1.4'),
             "redis_port": os.getenv('REDIS_PORT', '6379')
         }
     except Exception as e:
         return {
             "error": "Failed to connect to Redis or fetch users",
             "details": str(e),
-            "redis_host": os.getenv('REDIS_HOST', 'localhost'),
+            "redis_host": os.getenv('REDIS_HOST', '10.0.1.4'),
             "redis_port": os.getenv('REDIS_PORT', '6379')
         }
 
@@ -97,7 +97,7 @@ def redis_test():
     """Endpoint para probar la conexión con Redis"""
     try:
         import redis
-        redis_host = os.getenv('REDIS_HOST', 'localhost')
+        redis_host = os.getenv('REDIS_HOST', '10.0.1.4')
         redis_port = int(os.getenv('REDIS_PORT', '6379'))
         redis_password = os.getenv('REDIS_PASSWORD', None)
         redis_db = int(os.getenv('REDIS_DB', '0'))
@@ -129,7 +129,7 @@ def redis_test():
         return {
             "redis_connection": "failed",
             "error": str(e),
-            "redis_host": os.getenv('REDIS_HOST', 'localhost'),
+            "redis_host": os.getenv('REDIS_HOST', '10.0.1.4'),
             "redis_port": os.getenv('REDIS_PORT', '6379')
         }
 

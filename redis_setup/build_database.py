@@ -19,7 +19,8 @@ def build_db() -> bool:
         print("Clearing database...")
         
         # Configurar conexión Redis con variables de entorno
-        redis_host = os.getenv('REDIS_HOST', 'localhost')
+        # Forzar el uso de la IP 10.0.1.4 como valor por defecto
+        redis_host = os.getenv('REDIS_HOST', '10.0.1.4')
         redis_port = int(os.getenv('REDIS_PORT', '6379'))
         redis_password = os.getenv('REDIS_PASSWORD', None)
         redis_db = int(os.getenv('REDIS_DB', '0'))

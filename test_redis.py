@@ -11,7 +11,7 @@ def test_redis_connection():
     """Prueba la conexión a Redis"""
     load_dotenv()
     
-    redis_host = os.getenv('REDIS_HOST', 'localhost')
+    redis_host = os.getenv('REDIS_HOST', '10.0.1.4')
     redis_port = int(os.getenv('REDIS_PORT', '6379'))
     redis_password = os.getenv('REDIS_PASSWORD', None)
     redis_db = int(os.getenv('REDIS_DB', '0'))

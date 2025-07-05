@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuración de Redis usando variables de entorno
-REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+# Forzar el uso de la IP 10.0.1.4 como valor por defecto
+REDIS_HOST = os.getenv('REDIS_HOST', '10.0.1.4')
 REDIS_PORT = int(os.getenv('REDIS_PORT', '6379'))
 REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', None)
 REDIS_DB = int(os.getenv('REDIS_DB', '0'))
