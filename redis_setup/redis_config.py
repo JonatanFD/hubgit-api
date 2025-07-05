@@ -1,5 +1,8 @@
 import os
-from redis_om import get_redis_connection
+from dotenv import load_dotenv
+
+# Cargar variables de entorno
+load_dotenv()
 
 # Configuración de Redis usando variables de entorno
 REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
@@ -13,8 +16,10 @@ if REDIS_PASSWORD:
 else:
     REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 
-# Configurar redis-om para usar nuestra conexión personalizada
+print(f"Redis URL configurada: {REDIS_URL}")
+
 def configure_redis_om():
-    """Configura la conexión de redis-om con los parámetros especificados"""
+    """Configura la conexión de redis-om estableciendo la variable de entorno REDIS_OM_URL"""
     os.environ['REDIS_OM_URL'] = REDIS_URL
-    return get_redis_connection(url=REDIS_URL)
+    print(f"REDIS_OM_URL configurada: {REDIS_URL}")
+    return REDIS_URL

@@ -2,6 +2,7 @@ from redis_om import (Field, JsonModel)
 import json
 import redis
 import os
+from dotenv import load_dotenv
 from typing import List
 from domain.entities import *
 from redis_setup.redis_config import configure_redis_om
@@ -9,7 +10,8 @@ from redis_setup.redis_config import configure_redis_om
 def build_db() -> bool:
     data : dict = json.load(open("./redis_setup/db.json"))
     
-    # Configurar redis-om con nuestros parámetros
+    # Cargar variables de entorno y configurar redis-om
+    load_dotenv()
     configure_redis_om()
     
     try:

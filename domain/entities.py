@@ -12,10 +12,12 @@ from resources.create_post_resource import CreatePostResource
 # Cargar variables de entorno
 load_dotenv()
 
-# Configurar Redis-OM si no está configurado
-if not os.getenv('REDIS_OM_URL'):
+# Configurar Redis-OM una sola vez al importar el módulo
+_redis_configured = False
+if not _redis_configured:
     from redis_setup.redis_config import configure_redis_om
     configure_redis_om()
+    _redis_configured = True
 
 
 class UserRole(str, Enum):

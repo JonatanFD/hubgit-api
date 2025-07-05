@@ -11,11 +11,12 @@ from resources.create_post_resource import CreatePostResource
 from services.repositories.posts_service import PostsService
 from services.repositories.users_service import UsersService
 
-# Cargar variables de entorno
+# Cargar variables de entorno PRIMERO
 load_dotenv()
 
-# Configurar Redis-OM antes de crear la app
-configure_redis_om()
+# Configurar Redis-OM DESPUÉS de cargar las variables de entorno
+redis_url = configure_redis_om()
+print(f"Redis configurado con URL: {redis_url}")
 
 app = FastAPI()
 
@@ -26,6 +27,7 @@ try:
     print("Migrations completed successfully")
 except Exception as e:
     print(f"Migration error: {e}")
+    print("Continuing without migrations...")
 
 
 @app.get("/")
@@ -74,6 +76,20 @@ def create_post(company_id: str, post_resource: CreatePostResource):
 @app.get("/test")
 def test():
     return {"message": "Test endpoint working"}
+
+
+@app.get("/config-test")
+def config_test():
+    """Endpoint para verificar la configuración de variables de entorno"""
+    return {
+        "environment_variables": {
+            "REDIS_HOST": os.getenv('REDIS_HOST', 'NOT_SET'),
+            "REDIS_PORT": os.getenv('REDIS_PORT', 'NOT_SET'),
+            "REDIS_PASSWORD": "SET" if os.getenv('REDIS_PASSWORD') else "NOT_SET",
+            "REDIS_DB": os.getenv('REDIS_DB', 'NOT_SET'),
+            "REDIS_OM_URL": "SET" if os.getenv('REDIS_OM_URL') else "NOT_SET"
+        }
+    }
 
 
 @app.get("/redis-test")
