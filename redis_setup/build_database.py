@@ -1,17 +1,36 @@
 from redis_om import (Field, JsonModel)
 import json
 import redis
+import os
 from typing import List
 from domain.entities import *
+from redis_setup.redis_config import configure_redis_om
 
 def build_db() -> bool:
     data : dict = json.load(open("./redis_setup/db.json"))
+    
+    # Configurar redis-om con nuestros parámetros
+    configure_redis_om()
     
     try:
         # Limpiar base de datos usando una conexión Redis directa
         print("Clearing database...")
         
-        r = redis.Redis(decode_responses=True)
+        # Configurar conexión Redis con variables de entorno
+        redis_host = os.getenv('REDIS_HOST', 'localhost')
+        redis_port = int(os.getenv('REDIS_PORT', '6379'))
+        redis_password = os.getenv('REDIS_PASSWORD', None)
+        redis_db = int(os.getenv('REDIS_DB', '0'))
+        
+        print(f"Connecting to Redis at {redis_host}:{redis_port}")
+        
+        r = redis.Redis(
+            host=redis_host,
+            port=redis_port,
+            password=redis_password,
+            db=redis_db,
+            decode_responses=True
+        )
         
         # Eliminar todas las claves que empiecen con nuestros prefijos
         prefixes = ['user:*', 'company:*', 'post:*', 'comment:*']

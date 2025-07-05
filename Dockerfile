@@ -13,6 +13,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copia el código fuente
 COPY . .
 
+# Variables de entorno para Redis (pueden ser sobrescritas)
+ENV REDIS_HOST=localhost
+ENV REDIS_PORT=6379
+ENV REDIS_PASSWORD=
+ENV REDIS_DB=0
+
 # Expone el puerto por defecto de FastAPI/Uvicorn
 EXPOSE 8000
 
