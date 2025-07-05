@@ -2,21 +2,21 @@ from datetime import datetime, timezone
 import os
 from dotenv import load_dotenv
 
+# Cargar variables de entorno PRIMERO
+load_dotenv()
+
+# Configurar Redis-OM ANTES de importar cualquier entidad o servicio
+from redis_setup.redis_config import configure_redis_om
+redis_url = configure_redis_om()
+print(f"Redis configurado con URL: {redis_url}")
+
 from fastapi import FastAPI
 from redis_setup.build_database import build_db
-from redis_setup.redis_config import configure_redis_om
 from redis_om import Migrator
 
 from resources.create_post_resource import CreatePostResource
 from services.repositories.posts_service import PostsService
 from services.repositories.users_service import UsersService
-
-# Cargar variables de entorno PRIMERO
-load_dotenv()
-
-# Configurar Redis-OM DESPUÉS de cargar las variables de entorno
-redis_url = configure_redis_om()
-print(f"Redis configurado con URL: {redis_url}")
 
 app = FastAPI()
 
@@ -121,5 +121,40 @@ def redis_test():
             "error": str(e),
             "redis_host": os.getenv('REDIS_HOST', '10.0.1.4'),
             "redis_port": os.getenv('REDIS_PORT', '6379')
+        }
+
+
+@app.get("/debug-redis")
+def debug_redis():
+    """Endpoint para debug de la configuración de Redis"""
+    from redis_om import get_redis_connection
+    
+    try:
+        # Obtener la conexión que está usando redis-om
+        redis_conn = get_redis_connection()
+        connection_info = redis_conn.connection_pool.connection_kwargs
+        
+        return {
+            "redis_om_connection": {
+                "host": connection_info.get('host', 'unknown'),
+                "port": connection_info.get('port', 'unknown'),
+                "db": connection_info.get('db', 'unknown')
+            },
+            "environment_variables": {
+                "REDIS_OM_URL": os.getenv('REDIS_OM_URL', 'NOT_SET'),
+                "REDIS_HOST": os.getenv('REDIS_HOST', 'NOT_SET'),
+                "REDIS_PORT": os.getenv('REDIS_PORT', 'NOT_SET'),
+                "REDIS_DB": os.getenv('REDIS_DB', 'NOT_SET')
+            }
+        }
+    except Exception as e:
+        return {
+            "error": str(e),
+            "environment_variables": {
+                "REDIS_OM_URL": os.getenv('REDIS_OM_URL', 'NOT_SET'),
+                "REDIS_HOST": os.getenv('REDIS_HOST', 'NOT_SET'),
+                "REDIS_PORT": os.getenv('REDIS_PORT', 'NOT_SET'),
+                "REDIS_DB": os.getenv('REDIS_DB', 'NOT_SET')
+            }
         }
 

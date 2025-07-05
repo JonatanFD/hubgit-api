@@ -1,7 +1,5 @@
 import uuid
 from datetime import datetime, timezone
-import os
-from dotenv import load_dotenv
 
 from redis_om import Field, JsonModel
 from typing import Optional, Any, Self
@@ -9,15 +7,8 @@ from enum import Enum
 
 from resources.create_post_resource import CreatePostResource
 
-# Cargar variables de entorno
-load_dotenv()
-
-# Configurar Redis-OM una sola vez al importar el módulo
-_redis_configured = False
-if not _redis_configured:
-    from redis_setup.redis_config import configure_redis_om
-    configure_redis_om()
-    _redis_configured = True
+# La configuración de Redis se hace en redis_config.py y se importa antes
+# de importar este módulo en main.py
 
 
 class UserRole(str, Enum):
